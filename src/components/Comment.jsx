@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import '../App.css';
 
-function Comment({ comment, onAddComment, onEditComment, onDeleteComment }) {
+function Comment({ comment, onAddComment, onEditComment, onDeleteComment, onLike, onDislike }) {
   const [isEditing, setIsEditing] = useState(false);
   const [content, setContent] = useState(comment.content);
   const [replyContent, setReplyContent] = useState('');
@@ -40,8 +40,8 @@ function Comment({ comment, onAddComment, onEditComment, onDeleteComment }) {
           <p><strong className="comment-author">{comment.author}</strong> <span className="comment-timestamp">{new Date(comment.timestamp).toLocaleString()}</span></p>
           <p className="comment-content">{comment.content}</p>
           <div className="comment-actions">
-            <button>Like ({comment.likes})</button>
-            <button>Dislike ({comment.dislikes})</button>
+            <button onClick={() => onLike(comment.id)}>Like ({comment.likes})</button>
+            <button onClick={() => onDislike(comment.id)}>Dislike ({comment.dislikes})</button>
             <button onClick={() => setIsEditing(true)}>Edit</button>
             <button onClick={() => onDeleteComment(comment.id)}>Delete</button>
             <button onClick={() => setShowReply(!showReply)}>Reply</button>
@@ -63,7 +63,15 @@ function Comment({ comment, onAddComment, onEditComment, onDeleteComment }) {
       {comment.replies && comment.replies.length > 0 && (
         <div className="replies">
           {comment.replies.map(reply => (
-            <Comment key={reply.id} comment={reply} onAddComment={onAddComment} onEditComment={onEditComment} onDeleteComment={onDeleteComment} />
+            <Comment
+              key={reply.id}
+              comment={reply}
+              onAddComment={onAddComment}
+              onEditComment={onEditComment}
+              onDeleteComment={onDeleteComment}
+              onLike={onLike}
+              onDislike={onDislike}
+            />
           ))}
         </div>
       )}

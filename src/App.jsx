@@ -73,15 +73,52 @@ function App() {
     setComments(deleteComments(comments));
   };
 
+  const handleLike = (id) => {
+    const likeComments = (comments) => {
+      return comments.map(comment => {
+        if (comment.id === id) {
+          return { ...comment, likes: comment.likes + 1 };
+        } else if (comment.replies.length > 0) {
+          return { ...comment, replies: likeComments(comment.replies) };
+        }
+        return comment;
+      });
+    };
+    setComments(likeComments(comments));
+  };
+
+  const handleDislike = (id) => {
+    const dislikeComments = (comments) => {
+      return comments.map(comment => {
+        if (comment.id === id) {
+          return { ...comment, dislikes: comment.dislikes + 1 };
+        } else if (comment.replies.length > 0) {
+          return { ...comment, replies: dislikeComments(comment.replies) };
+        }
+        return comment;
+      });
+    };
+    setComments(dislikeComments(comments));
+  };
+
   return (
     <div className="app">
       <h1>Comments</h1>
       <AddComment onAddComment={handleAddComment} />
-      <CommentList comments={comments} onAddComment={handleAddComment} onEditComment={handleEditComment} onDeleteComment={handleDeleteComment} />
+      <CommentList
+        comments={comments}
+        onAddComment={handleAddComment}
+        onEditComment={handleEditComment}
+        onDeleteComment={handleDeleteComment}
+        onLike={handleLike}
+        onDislike={handleDislike}
+      />
     </div>
   );
 }
 
 export default App;
+
+
 
 
