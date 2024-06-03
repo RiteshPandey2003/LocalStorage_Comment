@@ -28,6 +28,8 @@ function App() {
       replies: []
     };
 
+    //parentID comming from comment onaddreply funciton 
+
     if (parentId) {
       setComments(comments.map(comment => 
         comment.id === parentId 
